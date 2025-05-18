@@ -22,6 +22,15 @@ app.use(express.json());
 async function run () {
     try {
         await client.connect();
+
+        const coffeeCollection = client.db('coffeeDB').collection('coffeeCollection');
+
+        app.get("/coffees", async(req, res) => {
+          const result= await coffeeCollection.find().toArray();
+          res.send(result);
+        })
+
+
         await client.db('admin').command({ping : 1})
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
     }
