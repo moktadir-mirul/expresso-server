@@ -16,7 +16,9 @@ const client = new MongoClient(uri, {
 });
 
 
-app.use(cors());
+app.use(cors({
+  origin: ['http://localhost:5173', 'https://recat-knowledge-cafe.web.app/'],
+}));
 app.use(express.json());
 
 async function run () {
