@@ -1,9 +1,15 @@
+require('dotenv').config();
 const express = require('express');
-const cors = require('cors');
 const app = express();
-const port = process.env.PORT || 5000;
+const cors = require('cors');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
-require('dotenv').config()
+app.use(cors());
+app.use(express.json());
+
+
+const port = process.env.PORT || 5000;
+
+
 
 const uri = `mongodb+srv://mirul-moktadir:${process.env.DB_PASSWORD}@cluster0.mnwmrsu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
@@ -16,14 +22,12 @@ const client = new MongoClient(uri, {
 });
 
 
-app.use(cors({
-  origin: ['http://localhost:5173', 'https://recat-knowledge-cafe.web.app/'],
-}));
-app.use(express.json());
+
+
 
 async function run () {
     try {
-        await client.connect();
+        // await client.connect();
 
         const coffeeCollection = client.db('coffeeDB').collection('coffeeCollection');
         const userCollection = client.db("coffeeDB").collection('userCollection');
@@ -86,8 +90,8 @@ async function run () {
           res.send(result);
         })
 
-        await client.db('admin').command({ping : 1})
-        console.log("Pinged your deployment. You successfully connected to MongoDB!");
+        // await client.db('admin').command({ping : 1})
+        // console.log("Pinged your deployment. You successfully connected to MongoDB!");
     }
     finally {
 
@@ -95,6 +99,10 @@ async function run () {
 }
 
 run().catch(console.dir)
+
+app.get('/', (req, res) => {
+  res.send('Coffee is getting warmer!')
+})
 
 app.listen(port, () => {
     console.log(`Coffee store server is running: ${port}`)
